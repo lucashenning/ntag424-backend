@@ -1,7 +1,7 @@
 import argparse
 import binascii
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from werkzeug.exceptions import BadRequest
 
 from config import SDMMAC_PARAM, ENC_FILE_DATA_PARAM, ENC_PICC_DATA_PARAM, SDM_FILE_READ_KEY, SDM_META_READ_KEY
@@ -59,7 +59,13 @@ def sdm_info():
     if file_data:
         file_data_utf8 = file_data.decode('utf-8', 'ignore')
 
-    return render_template('sdm_info.html',
+    if request.content_type == 'application/json':
+        return jsonify(picc_data_tag=picc_data_tag.hex(),
+                           uid=uid.hex(),
+                           read_ctr_num=read_ctr_num,
+                           file_data_utf8=file_data_utf8)
+    else: 
+        return render_template('sdm_info.html',
                            picc_data_tag=picc_data_tag,
                            uid=uid,
                            read_ctr_num=read_ctr_num,

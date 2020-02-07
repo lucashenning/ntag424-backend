@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  ntag424-backend:
+    image: ntag424-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
